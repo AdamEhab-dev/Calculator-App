@@ -1,6 +1,7 @@
 # Calculator App  
 
-Nice Calculator Ui App With Cubit As State Management.
+. Black & White Flutter Calculator Theme App.   
+. With Cubit As State Management.
 
 # Screen Shoot
 
