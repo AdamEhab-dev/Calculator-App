@@ -121,9 +121,9 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         if (num2 == 0) {
           emit(
             state.copyWith(
-              result: double.infinity,
+              result: 0,
               showResult: true,
-              expression: "لا يمكن القسمة على صفر",
+              expression: "can't divide by zero",
             ),
           );
           return;
@@ -163,7 +163,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         if (num2 == 0) {
           emit(
             state.copyWith(
-              result: double.nan, // أو 0 حسب ما تحب
+              result: double.nan,
               showResult: true,
               firstNum: null,
               secondNum: null,
