@@ -2,15 +2,7 @@
 
 Nice Calculator Ui App With Cubit As State Management.
 
-## Getting Started
+#Screen Shoot Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="720" height="1280" alt="Calculator_White" src="https://github.com/user-attachments/assets/08ff93e8-975f-474b-aa87-9eab9bd330dd" />
+<img width="720" height="1280" alt="Calculator_Black" src="https://github.com/user-attachments/assets/0968b68f-5060-4a9f-a8ed-17108dc26463" />
