@@ -1,6 +1,6 @@
-# calculator_proj
+# Calculator App  
 
-A new Flutter project.
+Nice Calculator Ui App With Cubit As State Management.
 
 ## Getting Started
 
