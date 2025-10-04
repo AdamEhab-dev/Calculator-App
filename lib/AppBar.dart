@@ -23,8 +23,11 @@ class Calc_Appbar extends StatelessWidget implements PreferredSizeWidget {
           color: switchValue == true ? Orange : BlueColor,
 
           shadows: [
-            Shadow(blurRadius: 5,
-              offset: Offset(1, 1), color:switchValue == false ? Colors.grey :Colors.black),
+            Shadow(
+              blurRadius: 5,
+              offset: Offset(1, 1),
+              color: switchValue == false ? Colors.grey : Colors.black,
+            ),
           ],
         ),
       ),
