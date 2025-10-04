@@ -4,5 +4,6 @@ Nice Calculator Ui App With Cubit As State Management.
 
 # Screen Shoot
 
-<img width="310" height="640" alt="Calculator_White" src="https://github.com/user-attachments/assets/08ff93e8-975f-474b-aa87-9eab9bd330dd" /> 
-<img width="720" height="1280" alt="Calculator_Black" src="https://github.com/user-attachments/assets/0968b68f-5060-4a9f-a8ed-17108dc26463" />
+
+<img width="310" height="611.0" alt="Calculator_White" src="https://github.com/user-attachments/assets/273d1470-410f-4aff-8d86-3c4f782d79f9" />
+<img width="310" height="615" alt="Calculator_Black" src="https://github.com/user-attachments/assets/e193c4cc-b6b6-4f12-8d42-0dd5b7802782" />
