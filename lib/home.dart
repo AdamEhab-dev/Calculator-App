@@ -1,3 +1,4 @@
+import 'package:calculator_proj/AppBar.dart';
 import 'package:calculator_proj/Buttons/Button_Blue_Orang.dart';
 import 'package:calculator_proj/Buttons/Button_White_Black.dart';
 import 'package:calculator_proj/calculator_Screen.dart';
@@ -16,12 +17,12 @@ class _HomeCalculatorState extends State<HomeCalculator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      appBar: Calc_Appbar(),
       backgroundColor: switchValue == true
           ? backgroundColorBlack
           : backgroundColor,
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(top: 0, left: 20,right: 20,bottom: 20),
         child: BlocBuilder<CalculatorCubit, CalculatorState>(
           builder: (context, state) {
             final cubit = context.read<CalculatorCubit>();
