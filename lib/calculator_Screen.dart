@@ -2,16 +2,16 @@ import 'package:advanced_shadows/advanced_shadows.dart';
 import 'package:calculator_proj/const.dart';
 import 'package:flutter/material.dart';
 
-class ScreenNumpers extends StatefulWidget {
-  ScreenNumpers({super.key, required this.Text1, required this.Text2});
+class calculatorScreen extends StatefulWidget {
+  calculatorScreen({super.key, required this.Text1, required this.Text2});
   String Text1;
   String Text2;
 
   @override
-  State<ScreenNumpers> createState() => _ScreenNumpersState();
+  State<calculatorScreen> createState() => _ScreenNumpersState();
 }
 
-class _ScreenNumpersState extends State<ScreenNumpers> {
+class _ScreenNumpersState extends State<calculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return AdvancedShadow(

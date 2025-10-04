@@ -1,8 +1,8 @@
 import 'package:calculator_proj/Buttons/Button_Blue_Orang.dart';
 import 'package:calculator_proj/Buttons/Button_White_Black.dart';
-import 'package:calculator_proj/conest.dart';
+import 'package:calculator_proj/calculator_Screen.dart';
+import 'package:calculator_proj/const.dart';
 import 'package:calculator_proj/cubit/calculator_cubit.dart';
-import 'package:calculator_proj/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,7 +59,7 @@ class _HomeCalculatorState extends State<HomeCalculator> {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: BlocBuilder<CalculatorCubit, CalculatorState>(
                     builder: (context, state) {
-                      return ScreenNumpers(
+                      return calculatorScreen(
                         Text1: state.expression.isEmpty
                             ? "0"
                             : state.expression,
