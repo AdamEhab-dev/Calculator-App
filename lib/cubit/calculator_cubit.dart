@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 part 'calculator_state.dart';
@@ -8,6 +9,23 @@ class CalculatorCubit extends Cubit<CalculatorState> {
   CalculatorCubit() : super(CalculatorState());
 
   void enterNumber(int number) {
+
+if (state.expression == "Enter any number first" ||
+      state.expression == "Error" ||
+      state.expression == "can't divide by zero") {
+    emit(
+      state.copyWith(
+        firstNum: number.toString(),
+        expression: number.toString(),
+        operator: null,
+        secondNum: null,
+        showResult: false,
+        result: null,
+      ),
+    );
+    return;
+  }
+
     if (state.showResult) {
       emit(
         state.copyWith(
@@ -47,8 +65,7 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         emit(
           state.copyWith(
             firstNum: newValue,
-            expression:
-                state.expression + ".", 
+            expression: state.expression + ".",
             showResult: false,
           ),
         );
@@ -115,59 +132,175 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
       final res = exp.evaluate(EvaluationType.REAL, context);
 
-      emit(
-        state.copyWith(
-          result: res,
-          showResult: true,
-        ),
-      );
+      if (res.isInfinite || res.isNaN) {
+        emit(
+          state.copyWith(
+            expression: "can't divide by zero",
+            result: 0,
+            showResult: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            result: res,
+            // expression: res.toString(),
+            showResult: true,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(state.copyWith(expression: "Error", result: 0, showResult: true));
+    }
+  }
+
+  ///////////////////////////
+  void applyPercentage() {
+    if (state.expression.isEmpty) return;
+
+    try {
+      if (state.showResult && state.result != null) {
+        num currentValue = state.result!;
+        double percentValue = currentValue / 100;
+
+        emit(
+          state.copyWith(
+            expression: percentValue.toString(),
+            result: percentValue,
+            showResult: true,
+            firstNum: percentValue.toString(),
+            secondNum: null,
+            operator: null,
+          ),
+        );
+        return;
+      }
+
+      final regex = RegExp(r'(-?\d+\.?\d*)$');
+      final match = regex.firstMatch(state.expression);
+
+      if (match != null) {
+        String current = match.group(0)!;
+        double value = double.parse(current);
+
+        if (state.firstNum != null && state.operator != null) {
+          double num1 = double.parse(state.firstNum!);
+          double percentValue = value / 100;
+          double res = 0;
+
+          switch (state.operator) {
+            case '+':
+              res = num1 + (num1 * percentValue);
+              break;
+            case '-':
+              res = num1 - (num1 * percentValue);
+              break;
+            case 'X':
+            case '*':
+              res = num1 * percentValue;
+              break;
+            case '÷':
+            case '/':
+              if (percentValue == 0) {
+                emit(
+                  state.copyWith(
+                    expression: "can't divide by zero",
+                    result: 0,
+                    showResult: true,
+                    firstNum: null,
+                    secondNum: null,
+                    operator: null,
+                  ),
+                );
+                return;
+              }
+              res = num1 / percentValue;
+              break;
+          }
+
+          emit(
+            state.copyWith(
+              result: res,
+              expression: res.toString(),
+              showResult: true,
+              firstNum: res.toString(),
+              secondNum: null,
+              operator: null,
+            ),
+          );
+        } else if (state.firstNum != null &&
+            state.secondNum != null &&
+            state.operator != null) {
+          double num1 = double.parse(state.firstNum!);
+          double num2 = double.parse(state.secondNum!);
+          double res = 0;
+
+          switch (state.operator) {
+            case '+':
+              res = num1 + num2;
+              break;
+            case '-':
+              res = num1 - num2;
+              break;
+            case 'X':
+            case '*':
+              res = num1 * num2;
+              break;
+            case '÷':
+            case '/':
+              if (num2 == 0) {
+                emit(
+                  state.copyWith(
+                    expression: "can't divide by zero",
+                    result: 0,
+                    showResult: true,
+                    firstNum: null,
+                    secondNum: null,
+                    operator: null,
+                  ),
+                );
+                return;
+              }
+              res = num1 / num2;
+              break;
+          }
+
+          double percentValue = res / 100;
+          emit(
+            state.copyWith(
+              expression: percentValue.toString(),
+              result: percentValue,
+              showResult: true,
+              firstNum: percentValue.toString(),
+              secondNum: null,
+              operator: null,
+            ),
+          );
+        } else {
+          double percentValue = value / 100;
+          String newExpression =
+              state.expression.substring(0, match.start) +
+              percentValue.toString();
+
+          emit(
+            state.copyWith(
+              expression: newExpression,
+              result: percentValue,
+              showResult: true,
+              firstNum: percentValue.toString(),
+              secondNum: null,
+              operator: null,
+            ),
+          );
+        }
+      }
     } catch (e) {
       emit(
         state.copyWith(
           expression: "Error",
           result: 0,
           showResult: true,
-        ),
-      );
-    }
-  }
-
-  /////////
-  void applyPercentage() {
-    if (state.firstNum != null &&
-        state.secondNum != null &&
-        state.operator != null) {
-      double num1 = double.parse(state.firstNum!);
-      double num2 = double.parse(state.secondNum!);
-      double res = 0;
-      if (state.operator == '+') {
-        res = num1 + num2;
-      } else if (state.operator == '-') {
-        res = num1 - num2;
-      } else if (state.operator == 'X') {
-        res = num1 * num2;
-      } else if (state.operator == '÷') {
-        if (num2 == 0) {
-          emit(
-            state.copyWith(
-              result: double.nan,
-              showResult: true,
-              firstNum: null,
-              secondNum: null,
-              operator: null,
-            ),
-          );
-          return;
-        } else {
-          res = num1 / num2;
-        }
-      }
-
-      emit(
-        state.copyWith(
-          result: res,
-          showResult: true,
-          firstNum: res.toString(),
+          firstNum: null,
           secondNum: null,
           operator: null,
         ),
@@ -198,26 +331,35 @@ class CalculatorCubit extends Cubit<CalculatorState> {
         ),
       );
     } else if (state.operator != null && state.secondNum != null) {
-      String current = state.secondNum!;
-      String newValue;
-      if (current.startsWith("-")) {
-        newValue = current.substring(1);
-      } else {
-        newValue = "-$current";
+      final regex = RegExp(r'(-?\d+\.?\d*)$');
+      final match = regex.firstMatch(state.expression);
+
+      if (match != null) {
+        String current = match.group(0)!;
+        String newValue = current.startsWith("-")
+            ? current.substring(1)
+            : "-$current";
+
+        String newExpression =
+            state.expression.substring(0, match.start) + newValue;
+
+        emit(
+          state.copyWith(
+            secondNum: newValue,
+            expression: newExpression,
+            showResult: false,
+          ),
+        );
       }
-
-      String newExpression = state.expression;
-      newExpression =
-          newExpression.substring(0, newExpression.length - current.length) +
-          newValue;
-
-      emit(
-        state.copyWith(
-          secondNum: newValue,
-          expression: newExpression,
-          showResult: false,
-        ),
-      );
+    }
+    else{
+          emit(
+          state.copyWith(
+            
+            expression: "Enter any number first",
+           
+          ),
+        );
     }
   }
 
