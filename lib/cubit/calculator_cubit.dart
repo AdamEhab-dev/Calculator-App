@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 part 'calculator_state.dart';
 
@@ -104,42 +105,28 @@ class CalculatorCubit extends Cubit<CalculatorState> {
 
   ///////////////////////////////////
   void calculate() {
-    if (state.firstNum != null &&
-        state.secondNum != null &&
-        state.operator != null) {
-      double num1 = double.parse(state.firstNum!);
-      double num2 = double.parse(state.secondNum!);
-      double res = 0;
+    try {
+      final parser = Parser();
+      final context = ContextModel();
 
-      if (state.operator == '+') {
-        res = num1 + num2;
-      } else if (state.operator == '-') {
-        res = num1 - num2;
-      } else if (state.operator == 'X') {
-        res = num1 * num2; 
-      } else if (state.operator == '÷') {
-        if (num2 == 0) {
-          emit(
-            state.copyWith(
-              result: 0,
-              showResult: true,
-              expression: "can't divide by zero",
-            ),
-          );
-          return;
-        } else {
-          res = num1 / num2;
-        }
-      }
+      final exp = parser.parse(
+        state.expression.replaceAll('X', '*').replaceAll('÷', '/'),
+      );
+
+      final res = exp.evaluate(EvaluationType.REAL, context);
 
       emit(
         state.copyWith(
           result: res,
           showResult: true,
-          firstNum: res.toString(),
-          secondNum: null,
-          operator: null,
-          expression: res.toString(),
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          expression: "Error",
+          result: 0,
+          showResult: true,
         ),
       );
     }
